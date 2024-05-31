@@ -17,3 +17,13 @@ struct Lied{
     std::string Genre;          //Genre des Liedes
     std::string Laenge;         //Länge des Liedes; Format: "MM:SS" z.B. "02:56" für 2 Minuten und 56 Sekunden
 };
+
+//Erstellen der Klasse MusikBibliothek
+class MusikBibliothek {
+
+public:
+    MusikBibliothek(const std::string& dateiname);      //Konstruktor für die Initialisierung der Musikbiliothek aus einer JSON-Datei
+    void Ausgabe();
+private:
+std::vector<Lied> Lieder;
+};
