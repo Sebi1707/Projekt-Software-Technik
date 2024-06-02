@@ -1,0 +1,29 @@
+{
+     "lieder": [
+       {
+         "Titel": "Titel 1",
+         "Kuenstler": "Künstler 1",
+         "Album": "Album 1",
+         "Erscheinungsjahr": 2024,
+         "Genre": "Pop",
+         "Laenge": "3:02"
+       },
+       {
+         "Titel": "Titel 2",
+         "Kuenstler": "Künstler 2",
+         "Album": "Album 2",
+         "Erscheinungsjahr": 2023,
+         "Genre": "Rock",
+         "Laenge": "4:34"
+       },
+       {
+         "Titel": "Titel 3",
+         "Kuenstler": "Künstler 3",
+         "Album": "Album 3",
+         "Erscheinungsjahr": 2022,
+         "Genre": "Rap",
+         "Laenge": "3:34"
+       }
+     ]
+  }
+
