@@ -8,6 +8,8 @@ int main(){
 
     MusikBibliothek bibliothek(dateipfad);  //Übergabe des Dateipfades an die MusikBibliothek-Funktion
 
+    bibliothek.Ausgabe();                   //Ausgabe der Daten aus der JSON-Datei
+
     return 0;
 
 };
