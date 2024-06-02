@@ -42,3 +42,20 @@ void MusikBibliothek::Ausgabe() {
         }
     }
 }
+
+bool MusikBibliothek::erstelleJSON(const std::string& dateiname){           //Funktion für Erstellung einer neuen JSON-Datei
+    json data = {{"lieder", json::array()}};
+
+    std::ofstream datei(dateiname);
+
+    if(datei.is_open()){
+        datei<<data.dump();
+        datei.close();
+        std::cout << "Es wurde die leere JSON-Datei " << dateiname << " erstellt." << std::endl;
+        return true;
+    }
+    else{
+        std::cerr << "Fehler: Es konnte keine JSON-Datei erstellt werden." << std::endl;
+        return false;
+    }
+}

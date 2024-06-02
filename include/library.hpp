@@ -24,6 +24,8 @@ class MusikBibliothek {
 public:
     MusikBibliothek(const std::string& dateiname);      //Konstruktor für die Initialisierung der Musikbiliothek aus einer JSON-Datei
     void Ausgabe();
+
+    static bool erstelleJSON(const std::string& dateiname);
 private:
-std::vector<Lied> Lieder;
+std::vector<Lied> Lieder;                               //Erstellung Vektor Lieder mit der Struktur "Lied"
 };
