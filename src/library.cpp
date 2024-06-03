@@ -4,8 +4,7 @@ MusikBibliothek::MusikBibliothek(const std::string& dateiname){
     std::ifstream bibliothek(dateiname);                 //Einlesen der JSON-Datei
 
     if(bibliothek.is_open()){
-        std::cout << "Datei " << dateiname << " wurde erfolgreich geöffnet." <<std::endl;        //Überprüfung ob Datei geöffnet werden konnte
-    json dateien;
+        json dateien;
         bibliothek >> dateien;          //Einlesen der Daten aus der Musikbibliothek in 'dateien'
 
         for(const auto& lied : dateien["lieder"]){      //For-Schleife für das Durchlaufen jedes Elements im Array dateien
@@ -32,6 +31,7 @@ void MusikBibliothek::Ausgabe() {
         return;
     }
     else {
+        std::cout << "Bibliothek wird ausgegeben." << std::endl;
     for (const auto& lied : Lieder) {                                           //For-Schleife für Ausgabe der Lieder aus Vektor Lieder
         std::cout << "Titel: " << lied.Titel << "\n"
                   << "Künstler: " << lied.Kuenstler << "\n"
@@ -58,4 +58,9 @@ bool MusikBibliothek::erstelleJSON(const std::string& dateiname){           //Fu
         std::cerr << "Fehler: Es konnte keine JSON-Datei erstellt werden." << std::endl;
         return false;
     }
+}
+
+bool MusikBibliothek::LiedHinzufügen(const Lied& neuesLied){
+    Lieder.push_back(neuesLied);
+    return true;
 }

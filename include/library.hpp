@@ -26,6 +26,8 @@ public:
     void Ausgabe();
 
     static bool erstelleJSON(const std::string& dateiname);
+    bool LiedHinzufügen(const Lied& neuesLied);
+
 private:
 std::vector<Lied> Lieder;                               //Erstellung Vektor Lieder mit der Struktur "Lied"
 };
