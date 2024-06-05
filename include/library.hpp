@@ -10,12 +10,12 @@ using json = nlohmann::json;
 
 //Festlegung der Struktur für Lieder
 struct Lied{
-    std::string Titel;          //Musiktitel
-    std::string Kuenstler;      //Name des Künstler
     std::string Album;          //Name des Albums
     int Erscheinungsjahr;       //Erscheinungsjahr des Liedes; Format "XXXX" z.B. "2024"
     std::string Genre;          //Genre des Liedes
+    std::string Kuenstler;      //Name des Künstler
     std::string Laenge;         //Länge des Liedes; Format: "MM:SS" z.B. "02:56" für 2 Minuten und 56 Sekunden
+    std::string Titel;          //Musiktitel
 };
 
 //Erstellen der Klasse MusikBibliothek
@@ -27,6 +27,7 @@ public:
 
     static bool erstelleJSON(const std::string& dateiname);
     bool LiedHinzufügen(const Lied& neuesLied);
+    bool speichern(const std::string& dateiname);
 
 private:
 std::vector<Lied> Lieder;                               //Erstellung Vektor Lieder mit der Struktur "Lied"

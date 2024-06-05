@@ -9,12 +9,12 @@ MusikBibliothek::MusikBibliothek(const std::string& dateiname){
 
         for(const auto& lied : dateien["lieder"]){      //For-Schleife für das Durchlaufen jedes Elements im Array dateien
             Lied neuesLied{                             //Erstellung eines neuen Array mit Struktur Lied und Befüllung mit den Daten aus dateien
-                lied["Titel"],
-                lied["Kuenstler"],
                 lied["Album"],
                 lied["Erscheinungsjahr"],
                 lied["Genre"],
-                lied["Laenge"]
+                lied["Künstler"],
+                lied["Länge"],
+                lied["Titel"]
             };
             Lieder.push_back(neuesLied);                //Hinzufügen des erstellten 'neuesLied' zu dem Vektor Lieder
         }
@@ -49,7 +49,7 @@ bool MusikBibliothek::erstelleJSON(const std::string& dateiname){           //Fu
     std::ofstream datei(dateiname);
 
     if(datei.is_open()){
-        datei<<data.dump();
+        datei<<data.dump(4);
         datei.close();
         std::cout << "Es wurde die leere JSON-Datei " << dateiname << " erstellt." << std::endl;
         return true;
@@ -63,4 +63,32 @@ bool MusikBibliothek::erstelleJSON(const std::string& dateiname){           //Fu
 bool MusikBibliothek::LiedHinzufügen(const Lied& neuesLied){
     Lieder.push_back(neuesLied);
     return true;
+}
+
+bool MusikBibliothek::speichern(const std::string& dateiname){
+    json dateien;
+
+    for(const auto& lied : Lieder){
+        json einzelneslied = {
+            {"Titel", lied.Titel},
+            {"Künstler", lied.Kuenstler},
+            {"Album", lied.Album},
+            {"Erscheinungsjahr", lied.Erscheinungsjahr},
+            {"Genre", lied.Genre},
+            {"Länge", lied.Laenge}
+        };
+
+        dateien["lieder"].push_back(einzelneslied);
+    }
+
+    std::ofstream datei(dateiname);
+
+    if(datei.is_open()){
+    datei << std::setw(4) << dateien;
+    datei.close();
+    return true;
+    }
+    else{
+        return false;
+    }
 }
