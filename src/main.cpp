@@ -16,7 +16,7 @@ int main(){
         std::string dateipfad;
         std::cin >> dateipfad;                                          //Einlesen des Dateipfades
 
-        if(!std::__fs::filesystem::exists(dateipfad)){                  //Überprüfen ob der eingebene Dateipfad existiert
+        if(!(std::__fs::filesystem::exists(dateipfad))){                  //Überprüfen ob der eingebene Dateipfad existiert
             std::cout << "Der Dateipfad " << dateipfad << " existiert nicht. Möchten Sie eine andere JSON-Datei öffnen? Antwort: Ja oder Nein: ";
             std::string OeffnenJSON;
             std::cin >> OeffnenJSON;
@@ -55,7 +55,6 @@ int main(){
                 Lied neuesLied;
 
                 std::cout << "Geben Sie den Titel des Liedes ein: " << std::endl;
-                std::cin.ignore();
                 std::getline (std::cin, neuesLied.Titel);
                 std::cout << "Geben Sie den Künstler ein: " << std::endl;
                 std::getline (std::cin, neuesLied.Kuenstler);
@@ -63,8 +62,8 @@ int main(){
                 std::getline (std::cin, neuesLied.Album);
                 std::cout << "Geben Sie das Erscheinungsjahr ein: " << std::endl;
                 std::cin >> neuesLied.Erscheinungsjahr;
-                std::cin.ignore();
                 std::cout << "Geben Sie das Genre ein: "<< std::endl;
+                std::cin.ignore();
                 std::getline (std::cin, neuesLied.Genre);
                 std::cout << "Geben Sie die Länge des Liedes ein(MM:SS): " << std::endl;
                 std::getline (std::cin, neuesLied.Laenge);
@@ -75,12 +74,15 @@ int main(){
                 std::string weiteres;
                 std::cin >> weiteres;
                 if(!(weiteres == "Ja")){
+                    std::cin.ignore();
+                    bibliothek.speichern(dateipfad);
                     break;
                     }
                 }
             }
+
             std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen,...? Für Beenden 'X' eingeben. ";
-            std::cin >> auswahl;
+            std::getline (std::cin, auswahl);
         }
     }
 
@@ -115,16 +117,22 @@ int main(){
                 std::getline (std::cin, neuesLied.Album);
                 std::cout << "Geben Sie das Erscheinungsjahr ein: " << std::endl;
                 std::cin >> neuesLied.Erscheinungsjahr;
-                std::cin.ignore();
                 std::cout << "Geben Sie das Genre ein: "<< std::endl;
+                std::cin.ignore();
                 std::getline (std::cin, neuesLied.Genre);
                 std::cout << "Geben Sie die Länge des Liedes ein(MM:SS): " << std::endl;
                 std::getline (std::cin, neuesLied.Laenge);
+
 
                 bibliothek.LiedHinzufügen(neuesLied);
 
                 std::cout << "Möchten Sie ein weiteres Lied hinzufügen? Ja oder Nein: ";
                 std::cin >> hinzufuegen;
+
+                if(!(hinzufuegen == "Ja")){
+                    bibliothek.speichern(neueJSON);
+                    break;
+                    }
                 }
             }
             else {
