@@ -1,5 +1,6 @@
 #include "library.hpp"
 
+//Einlesen einer JSON-Datei
 MusikBibliothek::MusikBibliothek(const std::string& dateiname){
     std::ifstream bibliothek(dateiname);                 //Einlesen der JSON-Datei
 
@@ -25,6 +26,7 @@ MusikBibliothek::MusikBibliothek(const std::string& dateiname){
     }
 }
 
+//Ausgabe der, in der JSON-Datei, enthaltenden Lieder
 void MusikBibliothek::Ausgabe() {
     if (Lieder.empty()) {
         std::cout << "Die Bibliothek enthält keine Lieder." << std::endl;       //Meldung wenn die Datei leer ist
@@ -43,7 +45,8 @@ void MusikBibliothek::Ausgabe() {
     }
 }
 
-bool MusikBibliothek::erstelleJSON(const std::string& dateiname){           //Funktion für Erstellung einer neuen JSON-Datei
+//Erstellung einer neuen JSON-Datei
+bool MusikBibliothek::erstelleJSON(const std::string& dateiname){
     json data = {{"lieder", json::array()}};
 
     std::ofstream datei(dateiname);
@@ -60,11 +63,70 @@ bool MusikBibliothek::erstelleJSON(const std::string& dateiname){           //Fu
     }
 }
 
-bool MusikBibliothek::LiedHinzufügen(const Lied& neuesLied){
-    Lieder.push_back(neuesLied);
-    return true;
-}
+std::vector<Lied> MusikBibliothek::Einlesen(){
+    std::vector<Lied> neueLieder;
 
+    while(true){
+    Lied neuesLied;
+
+    std::cout << "Geben Sie den Titel des Liedes ein: " << std::endl;
+    std::getline (std::cin, neuesLied.Titel);                                   //std::getline und std::cin.ignore() unter zu hilfenahme von KI herausgefunden
+    std::cout << "Geben Sie den Künstler ein: " << std::endl;                   //da das Einlesen nicht richtig funktioniert hat und immer wieder ein Buchstaben gefehlt hat oder keine Eingabe möglich war
+    std::getline (std::cin, neuesLied.Kuenstler);
+    std::cout << "Geben Sie das Album ein: " << std::endl;
+    std::getline (std::cin, neuesLied.Album);
+    std::cout << "Geben Sie das Erscheinungsjahr ein: " << std::endl;
+    std::cin >> neuesLied.Erscheinungsjahr;
+    std::cout << "Geben Sie das Genre ein: "<< std::endl;
+    std::cin.ignore();
+    std::getline (std::cin, neuesLied.Genre);
+    std::cout << "Geben Sie die Länge des Liedes ein(MM:SS): " << std::endl;
+    std::getline (std::cin, neuesLied.Laenge);
+
+    neueLieder.push_back(neuesLied);
+
+    std::cout << "Möchten Sie ein weiteres Lied hinzufügen? Ja oder Nein: ";
+    std::string weiteres;
+    std::cin >> weiteres;
+    std::cin.ignore();
+
+    if(!(weiteres == "Ja")){
+        return neueLieder;
+        }
+    }
+};
+
+//Funktion um ein neues Lied hinzuzufügen
+bool MusikBibliothek::LiedHinzufügen(const std::string& dateiname, std::vector<Lied>& neueLieder){
+
+            for(const auto& lied : neueLieder){
+                Lied neuesLied;
+                neuesLied.Titel = lied.Titel;
+                neuesLied.Kuenstler = lied.Kuenstler;
+                neuesLied.Album = lied.Album;
+                neuesLied.Erscheinungsjahr = lied.Erscheinungsjahr;
+                neuesLied.Genre = lied.Genre;
+                neuesLied.Laenge = lied.Laenge;
+
+                Lieder.push_back(neuesLied);
+            }
+
+            speichern(dateiname);
+            if(speichern(dateiname)){
+                return true;
+            }
+            else{
+                std::cout << "Hinzufügen neuer Lieder fehlgeschlagen!" << std::endl;
+                return false;
+            }
+
+            if(neueLieder.empty()){
+                return false;
+            }
+};
+
+
+//Speicherfunktion
 bool MusikBibliothek::speichern(const std::string& dateiname){
     json dateien;
 
@@ -93,6 +155,7 @@ bool MusikBibliothek::speichern(const std::string& dateiname){
     }
 }
 
+//Suchfunktion
 std::vector<Lied> MusikBibliothek::suchen(const std::string& suchkriterium, const std::string& suche){
     std::vector<Lied> gefundeneLieder;
 
@@ -106,9 +169,15 @@ std::vector<Lied> MusikBibliothek::suchen(const std::string& suchkriterium, cons
             gefundeneLieder.push_back(lied);
         };
     }
+
+    if(gefundeneLieder.empty()){
+        std::cout << "Es wurde kein Lied mit " << suchkriterium << " : " << suche << " gefunden." << std::endl;
+    }
+
     return gefundeneLieder;
 };
 
+//Ausgabe der Titel, welche mit der Suchfunktion gefunden wurden
 void MusikBibliothek::AusgabeTitel(const std::vector<Lied>& Titel){
     for(const auto& lied : Titel){
         std::cout << "Titel: " << lied.Titel << "\n"
@@ -117,5 +186,54 @@ void MusikBibliothek::AusgabeTitel(const std::vector<Lied>& Titel){
                   << "Erscheinungsjahr: " << lied.Erscheinungsjahr << "\n"
                   << "Genre: " << lied.Genre << "\n"
                   << "Länge: " << lied.Laenge << "\n\n";
+    }
+};
+
+//Funktion für Änderung der Meta-Daten und anschließender Speicherung
+bool MusikBibliothek::Datenaendern(std::vector<Lied>& Titel, const std::string& MetaDaten, const std::string& neuerWert, const std::string& dateiname){
+
+    if(Titel.empty()){
+        std::cout << "Es konnten keine Daten geändert werden." << std::endl;
+        return false;
+    }
+
+    std::string titel = Titel[0].Titel;
+
+    for(auto& lied : Lieder){
+        if(lied.Titel == titel){
+            if(MetaDaten == "Titel"){
+                lied.Titel = neuerWert;
+            }
+            else if(MetaDaten == "Künstler"){
+                lied.Kuenstler = neuerWert;
+            }
+            else if(MetaDaten == "Album"){
+                lied.Album = neuerWert;
+            }
+            else if(MetaDaten == "Erscheinungsjahr"){
+                lied.Erscheinungsjahr = std::stoi(neuerWert);
+            }
+            else if(MetaDaten == "Genre"){
+                lied.Genre = neuerWert;
+            }
+            else if(MetaDaten == "Länge"){
+                lied.Laenge = neuerWert;
+            }
+            else{
+                std::cout << MetaDaten << " nicht gefunden." << std::endl;
+                return false;
+                break;
+            }
+            speichern(dateiname);
+            break;
+        }
+    }
+    if(speichern(dateiname)){
+        std::cout << MetaDaten << " wurde erfolgreich in " << neuerWert << " geändert." <<std::endl;
+        return true;
+    }
+    else{
+        std::cout << "Fehler: Die Daten konnten nicht geändert werden.";
+        return false;
     }
 };
