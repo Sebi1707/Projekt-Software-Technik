@@ -39,7 +39,7 @@ int main(){
 
         MusikBibliothek bibliothek(dateipfad);
 
-        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen,...? Für Beenden 'X' eingeben: ";
+        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, ...? Für Beenden 'X' eingeben: ";
         std::string auswahl;
         std::cin.ignore();
         std::getline(std::cin, auswahl);
@@ -51,39 +51,14 @@ int main(){
                 }
 
             else if(auswahl == "Titel hinzufügen"){
-                while(true){
-                Lied neuesLied;
-
-                std::cout << "Geben Sie den Titel des Liedes ein: " << std::endl;
-                std::getline (std::cin, neuesLied.Titel);
-                std::cout << "Geben Sie den Künstler ein: " << std::endl;
-                std::getline (std::cin, neuesLied.Kuenstler);
-                std::cout << "Geben Sie das Album ein: " << std::endl;
-                std::getline (std::cin, neuesLied.Album);
-                std::cout << "Geben Sie das Erscheinungsjahr ein: " << std::endl;
-                std::cin >> neuesLied.Erscheinungsjahr;
-                std::cout << "Geben Sie das Genre ein: "<< std::endl;
-                std::cin.ignore();
-                std::getline (std::cin, neuesLied.Genre);
-                std::cout << "Geben Sie die Länge des Liedes ein(MM:SS): " << std::endl;
-                std::getline (std::cin, neuesLied.Laenge);
-
-                bibliothek.LiedHinzufügen(neuesLied);
-
-                std::cout << "Möchten Sie ein weiteres Lied hinzufügen? Ja oder Nein: ";
-                std::string weiteres;
-                std::cin >> weiteres;
-                if(!(weiteres == "Ja")){
-                    std::cin.ignore();
-                    bibliothek.speichern(dateipfad);
-                    break;
-                    }
-                }
+                std::vector<Lied> neueLieder = bibliothek.Einlesen();
+                bibliothek.LiedHinzufügen(dateipfad, neueLieder);
             }
 
             else if(auswahl == "Suchen"){
                 std::cout << "Möchten Sie nach einem Titel, einem Künstler, einem Album, einem Erscheinungsjahr, einem Genre oder einer Länge suchen? ";
                 std::string suchkriterium;
+                std::cin.ignore();
                 std::cin >> suchkriterium;
 
                 while((suchkriterium != "Titel")&&(suchkriterium != "Künstler")&&(suchkriterium != "Album")&&(suchkriterium != "Erscheinungsjahr")&&(suchkriterium != "Genre")&&(suchkriterium != "Länge")){
@@ -96,16 +71,32 @@ int main(){
                 std::cin >> suche;
 
                 std::vector<Lied> gefundenelieder = bibliothek.suchen(suchkriterium, suche);
+
                 if(!(gefundenelieder.empty())){
                     std::cout << "Diese Titel wurden gefunden: \n\n";
                     bibliothek.AusgabeTitel(gefundenelieder);
                 }
-                else{
-                    std::cout << "Es wurden kein " << suchkriterium << " " << suche << " gefunden." << std::endl;
-                }
+
             }
 
-            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, ...? Für Beenden 'X' eingeben. ";
+            else if(auswahl == "Daten ändern"){
+                std::cout << "Geben Sie den Titel ein von dem Sie die Daten ändern möchten: ";
+                std::string Titel;
+                std::getline (std::cin, Titel);
+
+                std::cout << "Welche Daten möchten Sie ändern? ";
+                std::string Metadaten;
+                std::getline (std::cin, Metadaten);
+
+                std::cout << "In was soll es geändert werden? ";
+                std::string neuerWert;
+                std::getline (std::cin, neuerWert);
+
+                std::vector<Lied> gefundenelieder = bibliothek.suchen("Titel", Titel);
+                bibliothek.Datenaendern(gefundenelieder, Metadaten, neuerWert, dateipfad);
+            }
+
+            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, ...? Für Beenden 'X' eingeben. ";
             std::getline (std::cin, auswahl);
         }
     }
@@ -129,35 +120,8 @@ int main(){
             }
 
             if (hinzufuegen == "Ja"){
-                while(hinzufuegen == "Ja"){
-                Lied neuesLied;
-
-                std::cin.ignore();
-                std::cout << "Geben Sie den Titel des Liedes ein: " << std::endl;
-                std::getline (std::cin, neuesLied.Titel);
-                std::cout << "Geben Sie den Künstler ein: " << std::endl;
-                std::getline (std::cin, neuesLied.Kuenstler);
-                std::cout << "Geben Sie das Album ein: " << std::endl;
-                std::getline (std::cin, neuesLied.Album);
-                std::cout << "Geben Sie das Erscheinungsjahr ein: " << std::endl;
-                std::cin >> neuesLied.Erscheinungsjahr;
-                std::cout << "Geben Sie das Genre ein: "<< std::endl;
-                std::cin.ignore();
-                std::getline (std::cin, neuesLied.Genre);
-                std::cout << "Geben Sie die Länge des Liedes ein(MM:SS): " << std::endl;
-                std::getline (std::cin, neuesLied.Laenge);
-
-
-                bibliothek.LiedHinzufügen(neuesLied);
-
-                std::cout << "Möchten Sie ein weiteres Lied hinzufügen? Ja oder Nein: ";
-                std::cin >> hinzufuegen;
-
-                if(!(hinzufuegen == "Ja")){
-                    bibliothek.speichern(neueJSON);
-                    break;
-                    }
-                }
+                std::vector<Lied> neueLieder = bibliothek.Einlesen();
+                bibliothek.LiedHinzufügen(neueJSON, neueLieder);
             }
             else {
                 return 0;
