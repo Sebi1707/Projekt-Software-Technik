@@ -84,7 +84,7 @@ bool MusikBibliothek::speichern(const std::string& dateiname){
     std::ofstream datei(dateiname);
 
     if(datei.is_open()){
-    datei << std::setw(4) << dateien;
+    datei << dateien.dump(4);
     datei.close();
     return true;
     }
@@ -92,3 +92,30 @@ bool MusikBibliothek::speichern(const std::string& dateiname){
         return false;
     }
 }
+
+std::vector<Lied> MusikBibliothek::suchen(const std::string& suchkriterium, const std::string& suche){
+    std::vector<Lied> gefundeneLieder;
+
+    for(const auto& lied : Lieder){
+        if((suchkriterium == "Titel" && lied.Titel == suche) ||
+            (suchkriterium == "Künstler" && lied.Kuenstler == suche)||
+            (suchkriterium == "Album" && lied.Album == suche) ||
+            (suchkriterium == "Erscheinungsjahr" && std::to_string(lied.Erscheinungsjahr) == suche) ||
+            (suchkriterium == "Genre" && lied.Genre == suche) ||
+            (suchkriterium == "Länge" && lied.Laenge == suche)){
+            gefundeneLieder.push_back(lied);
+        };
+    }
+    return gefundeneLieder;
+};
+
+void MusikBibliothek::AusgabeTitel(const std::vector<Lied>& Titel){
+    for(const auto& lied : Titel){
+        std::cout << "Titel: " << lied.Titel << "\n"
+                  << "Künstler: " << lied.Kuenstler << "\n"
+                  << "Album: " << lied.Album << "\n"
+                  << "Erscheinungsjahr: " << lied.Erscheinungsjahr << "\n"
+                  << "Genre: " << lied.Genre << "\n"
+                  << "Länge: " << lied.Laenge << "\n\n";
+    }
+};

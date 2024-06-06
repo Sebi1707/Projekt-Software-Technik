@@ -28,6 +28,8 @@ public:
     static bool erstelleJSON(const std::string& dateiname);
     bool LiedHinzufügen(const Lied& neuesLied);
     bool speichern(const std::string& dateiname);
+    std::vector<Lied> suchen(const std::string& suchkriterium, const std::string& suche);
+    void AusgabeTitel(const std::vector<Lied>& Titel);
 
 private:
 std::vector<Lied> Lieder;                               //Erstellung Vektor Lieder mit der Struktur "Lied"
