@@ -39,7 +39,7 @@ int main(){
 
         MusikBibliothek bibliothek(dateipfad);
 
-        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, ...? Für Beenden 'X' eingeben: ";
+        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen,...? Für Beenden 'X' eingeben: ";
         std::string auswahl;
         std::cin.ignore();
         std::getline(std::cin, auswahl);
@@ -81,7 +81,31 @@ int main(){
                 }
             }
 
-            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen,...? Für Beenden 'X' eingeben. ";
+            else if(auswahl == "Suchen"){
+                std::cout << "Möchten Sie nach einem Titel, einem Künstler, einem Album, einem Erscheinungsjahr, einem Genre oder einer Länge suchen? ";
+                std::string suchkriterium;
+                std::cin >> suchkriterium;
+
+                while((suchkriterium != "Titel")&&(suchkriterium != "Künstler")&&(suchkriterium != "Album")&&(suchkriterium != "Erscheinungsjahr")&&(suchkriterium != "Genre")&&(suchkriterium != "Länge")){
+                    std::cerr << "Fehlerhafte Eingabe! Geben Sie nochmal ein nach was Sie suchen möchten: ";
+                    std::cin >> suchkriterium;
+                }
+
+                std::cout << "Geben Sie ein nach was Sie suchen: ";
+                std::string suche;
+                std::cin >> suche;
+
+                std::vector<Lied> gefundenelieder = bibliothek.suchen(suchkriterium, suche);
+                if(!(gefundenelieder.empty())){
+                    std::cout << "Diese Titel wurden gefunden: \n\n";
+                    bibliothek.AusgabeTitel(gefundenelieder);
+                }
+                else{
+                    std::cout << "Es wurden kein " << suchkriterium << " " << suche << " gefunden." << std::endl;
+                }
+            }
+
+            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, ...? Für Beenden 'X' eingeben. ";
             std::getline (std::cin, auswahl);
         }
     }
