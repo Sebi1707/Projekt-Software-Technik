@@ -25,11 +25,13 @@ public:
     MusikBibliothek(const std::string& dateiname);      //Konstruktor für die Initialisierung der Musikbiliothek aus einer JSON-Datei
     void Ausgabe();
 
-    static bool erstelleJSON(const std::string& dateiname);
-    bool LiedHinzufügen(const Lied& neuesLied);
-    bool speichern(const std::string& dateiname);
-    std::vector<Lied> suchen(const std::string& suchkriterium, const std::string& suche);
-    void AusgabeTitel(const std::vector<Lied>& Titel);
+    static bool erstelleJSON(const std::string& dateiname);         //Funktion um neue JSON-Datei zu erstellen
+    std::vector<Lied> Einlesen();                                   //Funktion für Einlesen neuer Lieder
+    bool LiedHinzufügen(const std::string& dateiname, std::vector<Lied>& neueLieder);              //Funktion um ein Lied hinzuzufügen
+    bool speichern(const std::string& dateiname);                   //Funktion um die neuen Lieder zu speichern
+    std::vector<Lied> suchen(const std::string& suchkriterium, const std::string& suche);           //Funktion um nach Titeln oder anderen Daten zu suchen
+    void AusgabeTitel(const std::vector<Lied>& Titel);                                              //Funktion für Ausgabe der gefundenen Titeln
+    bool Datenaendern(std::vector<Lied>& Titel, const std::string& MetaDaten,const std::string& neuerWert, const std::string& dateiname);         //Funktion um Meta-Daten zu ändern
 
 private:
 std::vector<Lied> Lieder;                               //Erstellung Vektor Lieder mit der Struktur "Lied"
