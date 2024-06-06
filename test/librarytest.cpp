@@ -13,6 +13,8 @@ TEST_CASE("Keine Erstellung einer JSON-Datei"){
 TEST_CASE("Lied hinzufügen"){
     MusikBibliothek bibliothek("test.json");
 
+    std::vector<Lied> neueLieder;
+
     Lied neuesLied;
     neuesLied.Titel = "Titel";
     neuesLied.Kuenstler = "Künstler";
@@ -21,11 +23,15 @@ TEST_CASE("Lied hinzufügen"){
     neuesLied.Genre = "Pop";
     neuesLied.Laenge = "02:54";
 
-    REQUIRE(bibliothek.LiedHinzufügen(neuesLied) == true);
+    neueLieder.push_back(neuesLied);
+
+    REQUIRE(bibliothek.LiedHinzufügen("test.json", neueLieder) == true);
 };
 
 TEST_CASE("Lied Speichern"){
     MusikBibliothek bibliothek("test.json");
+
+    std::vector<Lied> neueLieder;
 
     Lied neuesLied;
     neuesLied.Titel = "Titel 1";
@@ -35,7 +41,7 @@ TEST_CASE("Lied Speichern"){
     neuesLied.Genre = "Pop";
     neuesLied.Laenge = "03:34";
 
-    bibliothek.LiedHinzufügen(neuesLied);
+    bibliothek.LiedHinzufügen("test.json", neueLieder);
 
     REQUIRE(bibliothek.speichern("test.json") == true);
     REQUIRE(bibliothek.speichern("") == false);
