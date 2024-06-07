@@ -39,7 +39,7 @@ int main(){
 
         MusikBibliothek bibliothek(dateipfad);
 
-        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, ...? Für Beenden 'X' eingeben: ";
+        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen...? Für Beenden 'X' eingeben: ";
         std::string auswahl;
         std::cin.ignore();
         std::getline(std::cin, auswahl);
@@ -47,7 +47,8 @@ int main(){
         while (!(auswahl== "X")){
 
             if(auswahl == "Ausgabe"){
-                bibliothek.Ausgabe();
+                MusikBibliothek bibliothek2(dateipfad);
+                bibliothek2.Ausgabe();
                 }
 
             else if(auswahl == "Titel hinzufügen"){
@@ -96,7 +97,37 @@ int main(){
                 bibliothek.Datenaendern(gefundenelieder, Metadaten, neuerWert, dateipfad);
             }
 
-            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, ...? Für Beenden 'X' eingeben. ";
+            else if(auswahl == "Titel entfernen"){
+                while(true){
+                std::cout << "Welchen Titel möchten Sie entfernen? ";
+                std::string Titel;
+                std::getline(std::cin, Titel);
+
+                while(true){
+                    if(bibliothek.entfernen(Titel, dateipfad)){
+                        break;
+                    }
+                    else{
+                        std::cout << "Geben Sie einen vorhandenen Titel ein: ";
+                        std::getline(std::cin, Titel);
+                        }
+                }
+                std::cout << "Möchten Sie noch weitere Titel entfernen? Ja oder Nein: ";
+                std::string wahl;
+                std::cin >> wahl;
+                while(wahl != "Ja" && wahl != "Nein"){
+                    std::cerr << "Fehlerhafte Eingabe. Geben Sie Ja oder Nein ein: ";
+                    std::cin >> wahl;
+                }
+                if(wahl == "Nein"){
+                    std::cin.ignore();
+                    break;
+                }
+                }
+
+            }
+
+            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, ...? Für Beenden 'X' eingeben. ";
             std::getline (std::cin, auswahl);
         }
     }
