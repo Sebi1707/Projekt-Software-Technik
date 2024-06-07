@@ -125,7 +125,6 @@ bool MusikBibliothek::LiedHinzufügen(const std::string& dateiname, std::vector<
             }
 };
 
-
 //Speicherfunktion
 bool MusikBibliothek::speichern(const std::string& dateiname){
     json dateien;
@@ -236,4 +235,22 @@ bool MusikBibliothek::Datenaendern(std::vector<Lied>& Titel, const std::string& 
         std::cout << "Fehler: Die Daten konnten nicht geändert werden.";
         return false;
     }
+};
+
+bool MusikBibliothek::entfernen(const std::string& Titel, const std::string& dateiname){
+    MusikBibliothek bibliothek(dateiname);
+
+    for(auto lied = Lieder.begin(); lied !=Lieder.end(); lied++){
+        if(lied->Titel == Titel){
+
+            Lieder.erase(lied);
+
+            speichern(dateiname);
+            std::cout << Titel << " wurde erfolgreich entfernt." << std::endl;
+            return true;
+        }
+    }
+
+    std::cout << "Titel nicht gefunden." << std::endl;
+    return false;
 };
