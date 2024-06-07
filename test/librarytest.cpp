@@ -41,8 +41,32 @@ TEST_CASE("Lied Speichern"){
     neuesLied.Genre = "Pop";
     neuesLied.Laenge = "03:34";
 
+    neueLieder.push_back(neuesLied);
+
     bibliothek.LiedHinzufügen("test.json", neueLieder);
 
     REQUIRE(bibliothek.speichern("test.json") == true);
     REQUIRE(bibliothek.speichern("") == false);
+
+    MusikBibliothek bibliothek2("test.json");
+    std::vector<Lied> hinzugefügtesLied = bibliothek2.suchen("Titel", "Titel 1");
+
+    REQUIRE(hinzugefügtesLied[0].Titel == "Titel 1");
+    REQUIRE(hinzugefügtesLied[0].Kuenstler == "Künstler 1");
+    REQUIRE(hinzugefügtesLied[0].Album == "Album 1");
+    REQUIRE(hinzugefügtesLied[0].Erscheinungsjahr == 2024);
+    REQUIRE(hinzugefügtesLied[0].Genre == "Pop");
+    REQUIRE(hinzugefügtesLied[0].Laenge == "03:34");
+};
+
+
+TEST_CASE("Meta-Daten ändern"){
+    MusikBibliothek bibliothek("test.json");
+
+    std::vector<Lied> songs = bibliothek.suchen("Titel", "Titel 1");
+
+    REQUIRE(bibliothek.Datenaendern(songs, "Künstler", "artist", "test.json")==true);
+    MusikBibliothek bibliothek2("test.json");
+    songs = bibliothek2.suchen("Titel", "Titel 1");
+    REQUIRE(songs[0].Kuenstler == "artist");
 };
