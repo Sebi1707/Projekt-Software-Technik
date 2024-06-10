@@ -2,6 +2,8 @@
 #include "catch.hpp"
 #include "library.hpp"
 
+MusikBibliothek bibliothek("test.json");
+
 TEST_CASE("Erstellung einer JSON-Datei"){
     REQUIRE(MusikBibliothek::erstelleJSON("test.json") == true);
 };
@@ -11,8 +13,6 @@ TEST_CASE("Keine Erstellung einer JSON-Datei"){
 };
 
 TEST_CASE("Lied hinzufügen"){
-    MusikBibliothek bibliothek("test.json");
-
     std::vector<Lied> neueLieder;
 
     Lied neuesLied;
@@ -29,8 +29,6 @@ TEST_CASE("Lied hinzufügen"){
 };
 
 TEST_CASE("Lied Speichern"){
-    MusikBibliothek bibliothek("test.json");
-
     std::vector<Lied> neueLieder;
 
     Lied neuesLied;
@@ -59,14 +57,46 @@ TEST_CASE("Lied Speichern"){
     REQUIRE(hinzugefügtesLied[0].Laenge == "03:34");
 };
 
-
 TEST_CASE("Meta-Daten ändern"){
-    MusikBibliothek bibliothek("test.json");
-
     std::vector<Lied> songs = bibliothek.suchen("Titel", "Titel 1");
 
     REQUIRE(bibliothek.Datenaendern(songs, "Künstler", "artist", "test.json")==true);
     MusikBibliothek bibliothek2("test.json");
     songs = bibliothek2.suchen("Titel", "Titel 1");
     REQUIRE(songs[0].Kuenstler == "artist");
+    REQUIRE(!(songs[0].Kuenstler == " artist"));
 };
+
+TEST_CASE("Titel entfernen"){
+    REQUIRE(bibliothek.entfernen("Titel 1", "test.json") == true);
+    REQUIRE(bibliothek.entfernen("Unbekannter Titel", "test.json") == false);
+};
+
+TEST_CASE("Playlist erstellen"){
+    REQUIRE(MusikBibliothek::erstellePlaylist("Test_Playlist", "test.json") == true);
+    REQUIRE(MusikBibliothek::erstellePlaylist("Test_Playlist", "") == false);
+};
+
+TEST_CASE("Titel zur Playlist hinzufügen"){
+    REQUIRE(bibliothek.TitelzurPlaylist("Test_Playlist", "test.json", "Titel") == true);
+    REQUIRE(bibliothek.TitelzurPlaylist("Test_Playlist", "test.json", "Unbekannter Titel") == false);
+
+    std::ifstream datei("test.json");
+    json data;
+    datei >> data;
+
+    bool gefunden = false;
+
+    for(auto& playlist : data["Playlist"]){
+        if(playlist["Name"] == "Test_Playlist"){
+            for(auto& titel : playlist["Titel"]){
+                if(titel=="Titel"){
+                gefunden = true;
+                break;
+                }
+            }
+        }
+    }
+
+    REQUIRE(gefunden == true);
+}
