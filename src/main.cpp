@@ -39,28 +39,27 @@ int main(){
 
         MusikBibliothek bibliothek(dateipfad);                              //Initialisieren der Musikbibliothek
 
-        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, eine Playlist erstellen...? Für Beenden 'X' eingeben: ";
-        std::string auswahl;
-        std::cin.ignore();
-        std::getline(std::cin, auswahl);
+        std::cout << "Was möchten Sie nun tun?\n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[0] Beenden\n";
+        int auswahl;
+        std::cin >> auswahl;
 
         //While-Schleife für Aktionen des Benutzers
-        while (!(auswahl== "X")){
+        while (!(auswahl== 0)){
 
             //Ausgabe der Titel
-            if(auswahl == "Ausgabe"){
+            if(auswahl == 1){
                 MusikBibliothek bibliothek2(dateipfad);
                 bibliothek2.Ausgabe();
                 }
 
             //Hinzufügen neuer Titel
-            else if(auswahl == "Titel hinzufügen"){
+            else if(auswahl == 2){
                 std::vector<Lied> neueLieder = bibliothek.Einlesen();
                 bibliothek.LiedHinzufügen(dateipfad, neueLieder);
             }
 
             //Titel suchen
-            else if(auswahl == "Suchen"){
+            else if(auswahl == 3){
                 std::cout << "Möchten Sie nach einem Titel, einem Künstler, einem Album, einem Erscheinungsjahr, einem Genre oder einer Länge suchen? ";
                 std::string suchkriterium;
                 std::cin.ignore();
@@ -87,7 +86,7 @@ int main(){
             }
 
             //Änderung von Daten
-            else if(auswahl == "Daten ändern"){
+            else if(auswahl == 4){
                 std::cout << "Geben Sie den Titel ein von dem Sie die Daten ändern möchten: ";
                 std::string Titel;
                 std::getline (std::cin, Titel);
@@ -106,7 +105,7 @@ int main(){
             }
 
             //Titel entfernen
-            else if(auswahl == "Titel entfernen"){
+            else if(auswahl == 5){
                 //While-Schleife für mehrmaliges Entfernen von Titeln
                 while(true){
                 std::cout << "Welchen Titel möchten Sie entfernen? ";
@@ -139,23 +138,78 @@ int main(){
                 }
             }
 
-            else if(auswahl == "Playlist erstellen"){
+            //Playlist erstellen
+            else if(auswahl == 6){
                 std::cout << "Geben Sie den Namen der Playlist ein: ";
                 std::string name;
                 std::getline(std::cin, name);
 
                 MusikBibliothek::erstellePlaylist(name, dateipfad);
+
+                std::cout << "Möchten Sie Titel aus der Bibliothek zur Playlist hinzufügen? ";
+                std::string wahl;
+                std::cin >> wahl;
+
+                while(!(wahl == "Nein")){
+                    if(wahl == "Ja"){
+                    std::cout << "Geben Sie den Titel des Liedes ein: ";
+                    std::string Titel;
+                    std::cin.ignore();
+                    std::getline(std::cin, Titel);
+
+                    bibliothek.TitelzurPlaylist(name, dateipfad, Titel);
+
+                    std::cout << "Möchten Sie weitere Titel zur Playlist hinzufügen? ";
+                    std::cin >> wahl;
+                    }
+                    else{
+                        std::cout << "Falsche Eingabe. Geben Sie Ja oder Nein ein: ";
+                        std::cin >> wahl;
+                        }
+                }
+            }
+
+            //Titel zu einer Playlist hinzufügen
+            else if(auswahl == 7){
+                std::cout << "Zu welcher Playlist möchten Sie Titel hinzufügen? ";
+                std::cin.ignore();
+                std::string playlist;
+                std::getline(std::cin, playlist);
+
+                while(true){
+                    std::cout << "Geben Sie den Titel des Liedes ein: ";
+                    std::string Titel;
+                    std::getline(std::cin, Titel);
+
+                    bibliothek.TitelzurPlaylist(playlist, dateipfad, Titel);
+
+                    std::cout << "Möchten Sie ein weiteres Lied hinzufügen? ";
+                    std::string wahl;
+                    std::cin >> wahl;
+                    if(wahl == "Ja"){
+                        continue;
+                    }
+                    else if(wahl == "Nein"){
+                        break;
+                    }
+                    else{
+                        std::cerr << "Fehlerhafte Eingabe. Geben Sie Ja oder Nein ein. ";
+                        std::cin >> wahl;
+                    }
+                    std::cin.ignore();
+                }
+
             }
 
             else {
-                std::cerr << "Fehlerhafte Eingabe. Geben Sie Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, Playlist erstellen oder 'X' für Beenden ein: "; // Hier fehlte ein Semikolon
+                std::cerr << "Fehlerhafte Eingabe. Geben Sie 1-7 ein oder 0 für Beenden.";
                 std::cin >> auswahl;
                 continue;
             }
 
             //Ausgabe und Einlesen für weitere Aktionen
-            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, eine Playlist erstellen ...? Für Beenden 'X' eingeben. ";
-            std::getline (std::cin, auswahl);
+            std::cout << "Möchten Sie noch etwas tun? \n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[0] Beenden\n";
+            std::cin >> auswahl;
         }
     }
 
