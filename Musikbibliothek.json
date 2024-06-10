@@ -1,29 +1,45 @@
 {
-     "lieder": [
-       {
-         "Titel": "Titel 1",
-         "Kuenstler": "Künstler 1",
-         "Album": "Album 1",
-         "Erscheinungsjahr": 2024,
-         "Genre": "Pop",
-         "Laenge": "3:02"
-       },
-       {
-         "Titel": "Titel 2",
-         "Kuenstler": "Künstler 2",
-         "Album": "Album 2",
-         "Erscheinungsjahr": 2023,
-         "Genre": "Rock",
-         "Laenge": "4:34"
-       },
-       {
-         "Titel": "Titel 3",
-         "Kuenstler": "Künstler 3",
-         "Album": "Album 3",
-         "Erscheinungsjahr": 2022,
-         "Genre": "Rap",
-         "Laenge": "3:34"
-       }
-     ]
-  }
-
+    "Playlist": [
+        {
+            "Name": "Playlist 1",
+            "Titel": [
+                "Titel 1",
+                "Titel 2"
+            ]
+        }
+    ],
+    "lieder": [
+        {
+            "Album": "Album 1",
+            "Erscheinungsjahr": 2024,
+            "Genre": "Pop",
+            "Künstler": "Künstler 1",
+            "Länge": "3:02",
+            "Titel": "Titel 1"
+        },
+        {
+            "Album": "Album",
+            "Erscheinungsjahr": 2023,
+            "Genre": "Rock",
+            "Künstler": "Künstler 2",
+            "Länge": "4:34",
+            "Titel": "Titel 2"
+        },
+        {
+            "Album": "Album",
+            "Erscheinungsjahr": 2022,
+            "Genre": "Rap",
+            "Künstler": "Künstler 3",
+            "Länge": "3:34",
+            "Titel": "Titel 3"
+        },
+        {
+            "Album": "Album 4",
+            "Erscheinungsjahr": 1999,
+            "Genre": "Pop",
+            "Künstler": "Künstler 4",
+            "Länge": "03:34",
+            "Titel": "Titel 4"
+        }
+    ]
+}
