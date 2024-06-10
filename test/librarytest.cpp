@@ -106,3 +106,8 @@ TEST_CASE("Titel aus Playlist entfernen"){
     REQUIRE(bibliothek.TitelPlaylistentfernen("Test_Playlist", "test.json", "Nicht vorhandener Titel") == false);
     REQUIRE(bibliothek.TitelPlaylistentfernen("Nicht vorhandene Playlist", "test.json", "Titel") == false);
 };
+
+TEST_CASE("Playlist entfernen"){
+    REQUIRE(bibliothek.Playlistentfernen("Test_Playlist", "test.json") == true);
+    REQUIRE(bibliothek.Playlistentfernen("Nicht vorhandene Playlist", "test.json") == false);
+};
