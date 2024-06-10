@@ -259,6 +259,10 @@ bool MusikBibliothek::entfernen(const std::string& Titel, const std::string& dat
 //Erstellen einer Playlist
 bool MusikBibliothek::erstellePlaylist(const std::string& namePlaylist, const std::string& dateiname){
     std::ifstream datei(dateiname);
+
+    if(!(datei.is_open())){
+        return false;
+    }
     json data;
 
     datei >> data;
@@ -289,6 +293,7 @@ bool MusikBibliothek::erstellePlaylist(const std::string& namePlaylist, const st
     }
 };
 
+//Titel zu einer Playlist hinzufügen
 bool MusikBibliothek::TitelzurPlaylist(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel){
     std::vector<Lied> lieder = MusikBibliothek::suchen("Titel", Titel);
 
@@ -324,3 +329,46 @@ bool MusikBibliothek::TitelzurPlaylist(const std::string& namePlaylist, const st
         return false;
     }
 };
+
+//Titel aus einer Playlist entfernen
+bool MusikBibliothek::TitelPlaylistentfernen(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel){
+    std::ifstream datei(dateiname);
+
+    json data;
+    datei >> data;
+    datei.close();
+
+    bool playlistgefunden = false;
+    bool titelgefunden = false;
+
+    for(auto& playlist : data["Playlist"]){
+        if(playlist["Name"] == namePlaylist){
+            auto& lieder = playlist["Titel"];
+            playlistgefunden = true;
+            for(auto lied = lieder.begin(); lied != lieder.end(); lied++){
+                if(*lied == Titel){
+                    lieder.erase(lied);
+                    titelgefunden = true;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    std::ofstream datei2(dateiname);
+
+    datei2 << data.dump(4);
+    datei2.close();
+    if(playlistgefunden && titelgefunden){
+    std::cout << "Titel wurde erfolgreich entfernt." << std::endl;
+    return true;}
+    else if(!titelgefunden){
+        std::cerr << Titel << " nicht gefunden." << std::endl;
+        return false;
+    }
+    else{
+        std::cerr << namePlaylist << " nicht gefunden." << std::endl;
+        return false;
+    }
+}
