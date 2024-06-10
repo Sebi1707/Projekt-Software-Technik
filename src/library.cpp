@@ -372,3 +372,36 @@ bool MusikBibliothek::TitelPlaylistentfernen(const std::string& namePlaylist, co
         return false;
     }
 }
+
+//Playlist entfernen
+bool MusikBibliothek::Playlistentfernen(const std::string& namePlaylist, const std::string& dateiname){
+    std::ifstream datei(dateiname);
+
+    json data;
+    datei >> data;
+    datei.close();
+
+    bool playlistgefunden = false;
+
+    for(auto playlist = data["Playlist"].begin(); playlist != data["Playlist"].end(); playlist++){
+        if((*playlist)["Name"] == namePlaylist){
+            data["Playlist"].erase(playlist);
+            playlistgefunden = true;
+            break;
+        }
+    }
+
+    std::ofstream datei2(dateiname);
+
+    datei2 << data.dump(4);
+    datei2.close();
+
+    if(playlistgefunden){
+        std::cout << namePlaylist << " erfolgreich gelöscht." << std::endl;
+        return true;
+    }
+    else{
+        std::cerr << namePlaylist << " wurde nicht gefunden." << std::endl;
+        return false;
+    }
+}
