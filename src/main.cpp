@@ -39,7 +39,7 @@ int main(){
 
         MusikBibliothek bibliothek(dateipfad);                              //Initialisieren der Musikbibliothek
 
-        std::cout << "Was möchten Sie nun tun?\n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[0] Beenden\n";
+        std::cout << "Was möchten Sie nun tun?\n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[8] Titel aus einer Playlist entfernen\n[0] Beenden\n";
         int auswahl;
         std::cin >> auswahl;
 
@@ -198,7 +198,39 @@ int main(){
                     }
                     std::cin.ignore();
                 }
+            }
 
+            else if(auswahl == 8){
+                std::cout << "Geben Sie den Namen der Playlist ein: ";
+                std::string playlist;
+                std::cin.ignore();
+                std::getline(std::cin, playlist);
+
+                while(true){
+                std::cout << "Geben Sie den Titel ein den Sie entfernen möchten: ";
+                std::string titel;
+                std::getline(std::cin, titel);
+
+                bibliothek.TitelPlaylistentfernen(playlist, dateipfad, titel);
+
+                std::cout << "Möchten Sie weitere Titel entfernen? ";
+                std::string wahl;
+                std::cin >> wahl;
+
+                while(wahl != "Nein" && wahl !="Ja"){
+                    std::cerr << "Fehlerhafte Eingabe geben Sie Ja oder Nein ein: ";
+                    std::cin >> wahl;
+                    }
+
+                if(wahl == "Ja"){
+                    std::cin.ignore();
+                    continue;
+                    }
+                else{
+                    std::cin.ignore();
+                    break;
+                    }
+                }
             }
 
             else {
@@ -208,7 +240,7 @@ int main(){
             }
 
             //Ausgabe und Einlesen für weitere Aktionen
-            std::cout << "Möchten Sie noch etwas tun? \n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[0] Beenden\n";
+            std::cout << "Möchten Sie noch etwas tun? \n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[8] Titel aus einer Playlist entfernen\n[0] Beenden\n";
             std::cin >> auswahl;
         }
     }
