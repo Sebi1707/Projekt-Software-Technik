@@ -39,7 +39,7 @@ int main(){
 
         MusikBibliothek bibliothek(dateipfad);                              //Initialisieren der Musikbibliothek
 
-        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen...? Für Beenden 'X' eingeben: ";
+        std::cout << "Was möchten Sie nun tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, eine Playlist erstellen...? Für Beenden 'X' eingeben: ";
         std::string auswahl;
         std::cin.ignore();
         std::getline(std::cin, auswahl);
@@ -138,8 +138,23 @@ int main(){
                     }
                 }
             }
+
+            else if(auswahl == "Playlist erstellen"){
+                std::cout << "Geben Sie den Namen der Playlist ein: ";
+                std::string name;
+                std::getline(std::cin, name);
+
+                MusikBibliothek::erstellePlaylist(name, dateipfad);
+            }
+
+            else {
+                std::cerr << "Fehlerhafte Eingabe. Geben Sie Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, Playlist erstellen oder 'X' für Beenden ein: "; // Hier fehlte ein Semikolon
+                std::cin >> auswahl;
+                continue;
+            }
+
             //Ausgabe und Einlesen für weitere Aktionen
-            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, ...? Für Beenden 'X' eingeben. ";
+            std::cout << "Möchten Sie noch etwas tun? Ausgabe, Titel hinzufügen, Suchen, Daten ändern, Titel entfernen, eine Playlist erstellen ...? Für Beenden 'X' eingeben. ";
             std::getline (std::cin, auswahl);
         }
     }
