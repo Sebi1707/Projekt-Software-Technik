@@ -39,7 +39,7 @@ int main(){
 
         MusikBibliothek bibliothek(dateipfad);                              //Initialisieren der Musikbibliothek
 
-        std::cout << "Was möchten Sie nun tun?\n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[8] Titel aus einer Playlist entfernen\n[9] Playlist entfernen\n[0] Beenden\n";
+        std::cout << "Was möchten Sie nun tun?\n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[8] Ausgabe Titel der Playlist\n[9] Titel aus einer Playlist entfernen\n[10] Playlist entfernen\n[0] Beenden\n";
         int auswahl;
         std::cin >> auswahl;
 
@@ -89,6 +89,7 @@ int main(){
             else if(auswahl == 4){
                 std::cout << "Geben Sie den Titel ein von dem Sie die Daten ändern möchten: ";
                 std::string Titel;
+                std::cin.ignore();
                 std::getline (std::cin, Titel);
 
                 std::cout << "Welche Daten möchten Sie ändern? ";
@@ -106,6 +107,7 @@ int main(){
 
             //Titel entfernen
             else if(auswahl == 5){
+                std::cin.ignore();
                 //While-Schleife für mehrmaliges Entfernen von Titeln
                 while(true){
                 std::cout << "Welchen Titel möchten Sie entfernen? ";
@@ -142,6 +144,7 @@ int main(){
             else if(auswahl == 6){
                 std::cout << "Geben Sie den Namen der Playlist ein: ";
                 std::string name;
+                std::cin.ignore();
                 std::getline(std::cin, name);
 
                 MusikBibliothek::erstellePlaylist(name, dateipfad);
@@ -200,8 +203,18 @@ int main(){
                 }
             }
 
-            //Titel aus einer Playlist entfernen
+            //Ausgabe der Titel in einer Playlist
             else if(auswahl == 8){
+                std::cout << "Welche Playlist möchten Sie ausgeben? ";
+                std::string playlist;
+                std::cin.ignore();
+                std::getline(std::cin, playlist);
+
+                bibliothek.AusgabePlaylist(playlist, dateipfad);
+            }
+
+            //Titel aus einer Playlist entfernen
+            else if(auswahl == 9){
                 std::cout << "Geben Sie den Namen der Playlist ein: ";
                 std::string playlist;
                 std::cin.ignore();
@@ -235,7 +248,7 @@ int main(){
             }
 
             //Playlist entfernen
-            else if(auswahl == 9){
+            else if(auswahl == 10){
                 std::cout << "Welche Playlist möchten Sie entfernen: ";
                 std::string playlist;
                 std::cin.ignore();
@@ -245,13 +258,13 @@ int main(){
             }
 
             else {
-                std::cerr << "Fehlerhafte Eingabe. Geben Sie 1-7 ein oder 0 für Beenden.";
+                std::cerr << "Fehlerhafte Eingabe. Geben Sie 1-10 ein oder 0 für Beenden. ";
                 std::cin >> auswahl;
                 continue;
             }
 
             //Ausgabe und Einlesen für weitere Aktionen
-            std::cout << "Möchten Sie noch etwas tun? \n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[8] Titel aus einer Playlist entfernen\n[9] Playlist entfernen\n[0] Beenden\n";
+            std::cout << "Möchten Sie noch etwas tun? \n[1] Ausgabe\n[2] Titel hinzufügen\n[3] Suchen\n[4] Daten ändern\n[5] Titel entfernen\n[6] eine Playlist erstellen\n[7] Titel zu einer Playlist hinzufügen\n[8] Ausgabe Titel der Playlist\n[9] Titel aus einer Playlist entfernen\n[10] Playlist entfernen\n[0] Beenden\n";
             std::cin >> auswahl;
         }
     }
@@ -276,13 +289,13 @@ int main(){
             std::cin >> hinzufuegen;
         }
 
-            if (hinzufuegen == "Ja"){
-                std::vector<Lied> neueLieder = bibliothek.Einlesen();
-                bibliothek.LiedHinzufügen(neueJSON, neueLieder);
-            }
-            else {
-                return 0;
-            }
+        if (hinzufuegen == "Ja"){
+            std::vector<Lied> neueLieder = bibliothek.Einlesen();
+            bibliothek.LiedHinzufügen(neueJSON, neueLieder);
+        }
+        else {
+            return 0;
+        }
     }
     return 0;
 };
