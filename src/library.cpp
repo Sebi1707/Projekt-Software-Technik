@@ -33,7 +33,7 @@ void MusikBibliothek::Ausgabe() {
         return;
     }
     else {
-        std::cout << "Bibliothek wird ausgegeben." << std::endl;
+        std::cout << "Bibliothek wird ausgegeben.\n" << std::endl;
     for (const auto& lied : Lieder) {                                           //For-Schleife für Ausgabe der Lieder aus Vektor Lieder
         std::cout << "Titel: " << lied.Titel << "\n"
                   << "Künstler: " << lied.Kuenstler << "\n"
@@ -237,6 +237,7 @@ bool MusikBibliothek::Datenaendern(std::vector<Lied>& Titel, const std::string& 
     }
 };
 
+//Funktion für Entfernung von Titeln
 bool MusikBibliothek::entfernen(const std::string& Titel, const std::string& dateiname){
     MusikBibliothek bibliothek(dateiname);
 
@@ -254,3 +255,37 @@ bool MusikBibliothek::entfernen(const std::string& Titel, const std::string& dat
     std::cout << "Titel nicht gefunden." << std::endl;
     return false;
 };
+
+
+//Erstellen einer Playlist
+bool MusikBibliothek::erstellePlaylist(const std::string& namePlaylist, const std::string& dateiname){
+    std::ifstream datei(dateiname);
+    json data;
+
+    datei >> data;
+    datei.close();
+
+    Playlist neuePlaylist;
+
+    neuePlaylist.Name = namePlaylist;
+    neuePlaylist.Titel = {};
+
+    json Playlist = {
+        {"Name", neuePlaylist.Name},
+        {"Titel", neuePlaylist.Titel}
+    };
+
+    data["Playlist"].push_back(Playlist);
+
+    std::ofstream neuedatei(dateiname);
+    if(neuedatei.is_open()){
+    neuedatei << data.dump(4);
+    neuedatei.close();
+    std::cout << "Playlist erfolgreich erstellt." <<std::endl;
+    return true;
+    }
+    else{
+        std::cerr << "Fehler beim Öffnen der Datei." << std::endl;
+        return false;
+    }
+}
