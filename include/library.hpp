@@ -18,6 +18,11 @@ struct Lied{
     std::string Titel;          //Musiktitel
 };
 
+struct Playlist{
+    std::string Name;           //Name der Playlist
+    std::vector<std::string> Titel;     //Titel in der Playlist
+};
+
 //Erstellen der Klasse MusikBibliothek
 class MusikBibliothek {
 
@@ -33,6 +38,8 @@ public:
     void AusgabeTitel(const std::vector<Lied>& Titel);                                              //Funktion für Ausgabe der gefundenen Titeln
     bool Datenaendern(std::vector<Lied>& Titel, const std::string& MetaDaten,const std::string& neuerWert, const std::string& dateiname);         //Funktion um Meta-Daten zu ändern
     bool entfernen(const std::string& Titel, const std::string& dateiname);
+
+    static bool erstellePlaylist(const std::string& namePlaylist, const std::string& dateiname);
 
 private:
 std::vector<Lied> Lieder;                               //Erstellung Vektor Lieder mit der Struktur "Lied"
