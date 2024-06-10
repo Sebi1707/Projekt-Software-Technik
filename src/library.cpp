@@ -256,7 +256,6 @@ bool MusikBibliothek::entfernen(const std::string& Titel, const std::string& dat
     return false;
 };
 
-
 //Erstellen einer Playlist
 bool MusikBibliothek::erstellePlaylist(const std::string& namePlaylist, const std::string& dateiname){
     std::ifstream datei(dateiname);
@@ -288,4 +287,40 @@ bool MusikBibliothek::erstellePlaylist(const std::string& namePlaylist, const st
         std::cerr << "Fehler beim Öffnen der Datei." << std::endl;
         return false;
     }
-}
+};
+
+bool MusikBibliothek::TitelzurPlaylist(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel){
+    std::vector<Lied> lieder = MusikBibliothek::suchen("Titel", Titel);
+
+    if(lieder.empty()){
+        return false;
+    }
+    else{
+        std::ifstream datei(dateiname);
+
+        json data;
+        datei >> data;
+        datei.close();
+
+        for(auto& playlist : data["Playlist"]){
+            if(playlist["Name"] == namePlaylist){
+                for(const auto& lied : lieder){
+                    playlist["Titel"].push_back(lied.Titel);
+                }
+                std::ofstream neuedatei(dateiname);
+                if(neuedatei.is_open()){
+                    neuedatei << data.dump(4);
+                    neuedatei.close();
+                    std::cout << "Titel erfolgreich hinzugefügt" << std::endl;
+                    return true;
+                }
+                else{
+                    std::cerr << "Fehler beim Öffnen der Datei." << std::endl;
+                    return false;
+                }
+            }
+        }
+        std::cerr << "Fehler: Playlist nicht gefunden." << std::endl;
+        return false;
+    }
+};
