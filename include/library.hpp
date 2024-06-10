@@ -41,8 +41,9 @@ public:
 
     static bool erstellePlaylist(const std::string& namePlaylist, const std::string& dateiname);    //Funktion für Erstellung einer Playlist
     bool TitelzurPlaylist(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel);     //Funktion für Titel zur Playlist hinzufügen
+    void AusgabePlaylist(const std::string& namePlaylist, const std::string& dateiname);                  //Funktion für Ausgabe der Titel in einer Playlist
     bool TitelPlaylistentfernen(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel);       //Funktionum Titel aus der Playlist zu entfernen
-    bool Playlistentfernen(const std::string& namePlaylist, const std::string& dateiname);
+    bool Playlistentfernen(const std::string& namePlaylist, const std::string& dateiname);          //Funktion um eine Playlist zu löschen
 
 private:
 std::vector<Lied> Lieder;                               //Erstellung Vektor Lieder mit der Struktur "Lied"

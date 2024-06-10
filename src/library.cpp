@@ -330,6 +330,34 @@ bool MusikBibliothek::TitelzurPlaylist(const std::string& namePlaylist, const st
     }
 };
 
+//Ausgabe der Titel einer Playlist
+void MusikBibliothek::AusgabePlaylist(const std::string& namePlaylist, const std::string& dateiname){
+    std::ifstream datei(dateiname);
+
+    json data;
+    datei >> data;
+    datei.close();
+
+    bool playlistgefunden = false;
+
+    for(auto& playlist : data["Playlist"]){
+        if(playlist["Name"] == namePlaylist){
+            playlistgefunden = true;
+            for(auto& lied : playlist["Titel"]){
+                if(lied.empty()){
+                    std::cout << "In der Playlist " << namePlaylist << " sind keine Lieder enthalten." << std::endl;
+                    break;
+                }
+                std::cout << lied << std::endl;
+            }
+            break;
+        }
+    }
+    if(!playlistgefunden){
+        std::cerr << namePlaylist << " nicht gefunden." << std::endl;
+    }
+};
+
 //Titel aus einer Playlist entfernen
 bool MusikBibliothek::TitelPlaylistentfernen(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel){
     std::ifstream datei(dateiname);
