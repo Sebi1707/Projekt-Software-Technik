@@ -65,7 +65,7 @@ bool MusikBibliothek::erstelleJSON(const std::string& dateiname){
 
 std::vector<Lied> MusikBibliothek::Einlesen(){
     std::vector<Lied> neueLieder;
-
+    std::cin.ignore();
     while(true){
     Lied neuesLied;
 
@@ -113,6 +113,7 @@ bool MusikBibliothek::LiedHinzufügen(const std::string& dateiname, std::vector<
 
             speichern(dateiname);
             if(speichern(dateiname)){
+                std::cout << "Hinzufügen der Lieder erfolgreich." << std::endl;
                 return true;
             }
             else{
@@ -243,17 +244,33 @@ bool MusikBibliothek::entfernen(const std::string& Titel, const std::string& dat
 
     for(auto lied = Lieder.begin(); lied !=Lieder.end(); lied++){
         if(lied->Titel == Titel){
+            std::cout << "Möchten Sie den Titel wirklich löschen? ";
+            std::string wahl;
+            std::cin >> wahl;
+            while(true){
+                if(wahl == "Ja"){Lieder.erase(lied);
 
-            Lieder.erase(lied);
+                speichern(dateiname);
+                std::cout << Titel << " wurde erfolgreich entfernt." << std::endl;
+                    return true;
+                    break;
+                }
+                else if(wahl == "Nein"){
+                    return false;
+                    break;
+                }
+                else{
+                    std::cerr << "Fehlerhafte Eingabe. Geben Sie Ja oder Nein ein: ";
+                    std::cin >> wahl;
+                }
+            }
 
-            speichern(dateiname);
-            std::cout << Titel << " wurde erfolgreich entfernt." << std::endl;
-            return true;
         }
     }
 
     std::cout << "Titel nicht gefunden." << std::endl;
     return false;
+
 };
 
 //Erstellen einer Playlist
@@ -375,9 +392,27 @@ bool MusikBibliothek::TitelPlaylistentfernen(const std::string& namePlaylist, co
             playlistgefunden = true;
             for(auto lied = lieder.begin(); lied != lieder.end(); lied++){
                 if(*lied == Titel){
-                    lieder.erase(lied);
-                    titelgefunden = true;
-                    break;
+                    std::cout << "Möchten Sie den Titel wirklich löschen? ";
+                    std::string wahl;
+                    std::cin >> wahl;
+                    while(true){
+                        if(wahl == "Ja"){
+                            lieder.erase(lied);
+                            titelgefunden = true;
+                            break;
+                        }
+                         else if(wahl == "Nein"){
+                            return false;
+                            break;
+                        }
+                         else{
+                            std::cerr << "Fehlerhafte Eingabe. Geben Sie Ja oder Nein ein: ";
+                            std::cin >> wahl;
+                        }
+                    }
+                    if(titelgefunden){
+                        break;
+                    }
                 }
             }
             break;
