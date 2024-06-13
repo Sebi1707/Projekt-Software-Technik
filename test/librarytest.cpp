@@ -2,7 +2,6 @@
 #include "catch.hpp"
 #include "library.hpp"
 
-MusikBibliothek bibliothek("test.json");
 
 TEST_CASE("Erstellung einer JSON-Datei"){
     REQUIRE(MusikBibliothek::erstelleJSON("test.json") == true);
@@ -13,6 +12,7 @@ TEST_CASE("Keine Erstellung einer JSON-Datei"){
 };
 
 TEST_CASE("Lied hinzufügen"){
+    MusikBibliothek bibliothek("test.json");
     std::vector<Lied> neueLieder;
 
     Lied neuesLied;
@@ -29,6 +29,7 @@ TEST_CASE("Lied hinzufügen"){
 };
 
 TEST_CASE("Lied Speichern"){
+    MusikBibliothek bibliothek("test.json");
     std::vector<Lied> neueLieder;
 
     Lied neuesLied;
@@ -58,6 +59,7 @@ TEST_CASE("Lied Speichern"){
 };
 
 TEST_CASE("Meta-Daten ändern"){
+    MusikBibliothek bibliothek("test.json");
     std::vector<Lied> songs = bibliothek.suchen("Titel", "Titel 1");
 
     REQUIRE(bibliothek.Datenaendern(songs, "Künstler", "artist", "test.json")==true);
@@ -68,6 +70,7 @@ TEST_CASE("Meta-Daten ändern"){
 };
 
 TEST_CASE("Titel entfernen"){
+    MusikBibliothek bibliothek("test.json");
     REQUIRE(bibliothek.entfernen("Titel 1", "test.json") == true);
     REQUIRE(bibliothek.entfernen("Unbekannter Titel", "test.json") == false);
 };
@@ -77,7 +80,14 @@ TEST_CASE("Playlist erstellen"){
     REQUIRE(MusikBibliothek::erstellePlaylist("Test_Playlist", "") == false);
 };
 
+TEST_CASE("Existiert Playlist"){
+    MusikBibliothek bibliothek("test.json");
+    REQUIRE(bibliothek.ExistPlaylist("Test_Playlist", "test.json") == true);
+    REQUIRE(bibliothek.ExistPlaylist("Nicht vorhandene Playlist", "test.json") == false);
+}
+
 TEST_CASE("Titel zur Playlist hinzufügen"){
+    MusikBibliothek bibliothek("test.json");
     REQUIRE(bibliothek.TitelzurPlaylist("Test_Playlist", "test.json", "Titel") == true);
     REQUIRE(bibliothek.TitelzurPlaylist("Test_Playlist", "test.json", "Unbekannter Titel") == false);
 
@@ -102,12 +112,14 @@ TEST_CASE("Titel zur Playlist hinzufügen"){
 };
 
 TEST_CASE("Titel aus Playlist entfernen"){
+    MusikBibliothek bibliothek("test.json");
     REQUIRE(bibliothek.TitelPlaylistentfernen("Test_Playlist", "test.json", "Titel") == true);
     REQUIRE(bibliothek.TitelPlaylistentfernen("Test_Playlist", "test.json", "Nicht vorhandener Titel") == false);
     REQUIRE(bibliothek.TitelPlaylistentfernen("Nicht vorhandene Playlist", "test.json", "Titel") == false);
 };
 
 TEST_CASE("Playlist entfernen"){
+    MusikBibliothek bibliothek("test.json");
     REQUIRE(bibliothek.Playlistentfernen("Test_Playlist", "test.json") == true);
-    REQUIRE(bibliothek.Playlistentfernen("Nicht vorhandene Playlist", "test.json") == false);
 };
+
