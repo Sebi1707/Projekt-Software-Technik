@@ -65,7 +65,6 @@ bool MusikBibliothek::erstelleJSON(const std::string& dateiname){
 
 std::vector<Lied> MusikBibliothek::Einlesen(){
     std::vector<Lied> neueLieder;
-    std::cin.ignore();
     while(true){
     Lied neuesLied;
 
@@ -244,33 +243,18 @@ bool MusikBibliothek::entfernen(const std::string& Titel, const std::string& dat
 
     for(auto lied = Lieder.begin(); lied !=Lieder.end(); lied++){
         if(lied->Titel == Titel){
-            std::cout << "Möchten Sie den Titel wirklich löschen? ";
-            std::string wahl;
-            std::cin >> wahl;
-            while(true){
-                if(wahl == "Ja"){Lieder.erase(lied);
+            Lieder.erase(lied);
 
-                speichern(dateiname);
-                std::cout << Titel << " wurde erfolgreich entfernt." << std::endl;
-                    return true;
-                    break;
-                }
-                else if(wahl == "Nein"){
-                    return false;
-                    break;
-                }
-                else{
-                    std::cerr << "Fehlerhafte Eingabe. Geben Sie Ja oder Nein ein: ";
-                    std::cin >> wahl;
-                }
-            }
-
+            speichern(dateiname);
+            std::cout << Titel << " wurde erfolgreich entfernt." << std::endl;
+            return true;
+            break;
         }
+
     }
 
     std::cout << "Titel nicht gefunden." << std::endl;
     return false;
-
 };
 
 //Erstellen einer Playlist
@@ -310,6 +294,30 @@ bool MusikBibliothek::erstellePlaylist(const std::string& namePlaylist, const st
     }
 };
 
+//Existenz einer Playlist
+bool MusikBibliothek::ExistPlaylist(const std::string& namePlaylist, const std::string& dateiname){
+    std::ifstream datei(dateiname);
+
+    json data;
+    datei >> data;
+    datei.close();
+
+    bool playlistgefunden = false;
+    for (const auto& playlist : data["Playlist"]) {
+        if (playlist["Name"] == namePlaylist) {
+            playlistgefunden = true;
+            break;
+        }
+    }
+
+    if (playlistgefunden) {
+        return true;
+    } else {
+        std::cout << "Playlist " << namePlaylist << " nicht gefunden." << std::endl;
+        return false;
+    }
+}
+
 //Titel zu einer Playlist hinzufügen
 bool MusikBibliothek::TitelzurPlaylist(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel){
     std::vector<Lied> lieder = MusikBibliothek::suchen("Titel", Titel);
@@ -342,9 +350,8 @@ bool MusikBibliothek::TitelzurPlaylist(const std::string& namePlaylist, const st
                 }
             }
         }
-        std::cerr << "Fehler: Playlist nicht gefunden." << std::endl;
-        return false;
     }
+    return false;
 };
 
 //Ausgabe der Titel einer Playlist
@@ -355,11 +362,8 @@ void MusikBibliothek::AusgabePlaylist(const std::string& namePlaylist, const std
     datei >> data;
     datei.close();
 
-    bool playlistgefunden = false;
-
     for(auto& playlist : data["Playlist"]){
         if(playlist["Name"] == namePlaylist){
-            playlistgefunden = true;
             for(auto& lied : playlist["Titel"]){
                 if(lied.empty()){
                     std::cout << "In der Playlist " << namePlaylist << " sind keine Lieder enthalten." << std::endl;
@@ -369,9 +373,6 @@ void MusikBibliothek::AusgabePlaylist(const std::string& namePlaylist, const std
             }
             break;
         }
-    }
-    if(!playlistgefunden){
-        std::cerr << namePlaylist << " nicht gefunden." << std::endl;
     }
 };
 
@@ -383,33 +384,16 @@ bool MusikBibliothek::TitelPlaylistentfernen(const std::string& namePlaylist, co
     datei >> data;
     datei.close();
 
-    bool playlistgefunden = false;
     bool titelgefunden = false;
 
     for(auto& playlist : data["Playlist"]){
         if(playlist["Name"] == namePlaylist){
             auto& lieder = playlist["Titel"];
-            playlistgefunden = true;
             for(auto lied = lieder.begin(); lied != lieder.end(); lied++){
                 if(*lied == Titel){
-                    std::cout << "Möchten Sie den Titel wirklich löschen? ";
-                    std::string wahl;
-                    std::cin >> wahl;
-                    while(true){
-                        if(wahl == "Ja"){
-                            lieder.erase(lied);
-                            titelgefunden = true;
-                            break;
-                        }
-                         else if(wahl == "Nein"){
-                            return false;
-                            break;
-                        }
-                         else{
-                            std::cerr << "Fehlerhafte Eingabe. Geben Sie Ja oder Nein ein: ";
-                            std::cin >> wahl;
-                        }
-                    }
+                    lieder.erase(lied);
+                    titelgefunden = true;
+
                     if(titelgefunden){
                         break;
                     }
@@ -423,15 +407,11 @@ bool MusikBibliothek::TitelPlaylistentfernen(const std::string& namePlaylist, co
 
     datei2 << data.dump(4);
     datei2.close();
-    if(playlistgefunden && titelgefunden){
+    if(titelgefunden){
     std::cout << "Titel wurde erfolgreich entfernt." << std::endl;
     return true;}
-    else if(!titelgefunden){
-        std::cerr << Titel << " nicht gefunden." << std::endl;
-        return false;
-    }
     else{
-        std::cerr << namePlaylist << " nicht gefunden." << std::endl;
+        std::cerr << Titel << " nicht gefunden." << std::endl;
         return false;
     }
 }
@@ -444,12 +424,10 @@ bool MusikBibliothek::Playlistentfernen(const std::string& namePlaylist, const s
     datei >> data;
     datei.close();
 
-    bool playlistgefunden = false;
 
     for(auto playlist = data["Playlist"].begin(); playlist != data["Playlist"].end(); playlist++){
         if((*playlist)["Name"] == namePlaylist){
             data["Playlist"].erase(playlist);
-            playlistgefunden = true;
             break;
         }
     }
@@ -459,12 +437,6 @@ bool MusikBibliothek::Playlistentfernen(const std::string& namePlaylist, const s
     datei2 << data.dump(4);
     datei2.close();
 
-    if(playlistgefunden){
-        std::cout << namePlaylist << " erfolgreich gelöscht." << std::endl;
-        return true;
-    }
-    else{
-        std::cerr << namePlaylist << " wurde nicht gefunden." << std::endl;
-        return false;
-    }
+    std::cout << namePlaylist << " erfolgreich gelöscht." << std::endl;
+    return true;
 }

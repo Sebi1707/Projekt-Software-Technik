@@ -40,6 +40,7 @@ public:
     bool entfernen(const std::string& Titel, const std::string& dateiname);                         //Funktion für Entfernung von Titeln
 
     static bool erstellePlaylist(const std::string& namePlaylist, const std::string& dateiname);    //Funktion für Erstellung einer Playlist
+    bool ExistPlaylist(const std::string& nameplaylist, const std::string& dateiname);                  //Funktion zur Überprüfung ob eine Playlist existiert
     bool TitelzurPlaylist(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel);     //Funktion für Titel zur Playlist hinzufügen
     void AusgabePlaylist(const std::string& namePlaylist, const std::string& dateiname);                  //Funktion für Ausgabe der Titel in einer Playlist
     bool TitelPlaylistentfernen(const std::string& namePlaylist, const std::string& dateiname, const std::string& Titel);       //Funktionum Titel aus der Playlist zu entfernen
