@@ -18,3 +18,7 @@ Es werden folgende Daten der Lieder gespeichert:
 - Erscheinungsjahr
 - Genre
 - Länge
+
+##UML-Diagramm
+
+![UML-Klassendiagramm der Musikbibliothek](./UML_Diagramm_SWT_Projekt.jpg)
