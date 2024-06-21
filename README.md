@@ -21,4 +21,4 @@ Es werden folgende Daten der Lieder gespeichert:
 
 ## UML-Diagramm
 
-![UML-Klassendiagramm der Musikbibliothek](./UML_SWT_Musikbibliothek-1.jpg)
+![UML-Klassendiagramm der Musikbibliothek](./UML_SWT_Musikbibliothek.jpg)
